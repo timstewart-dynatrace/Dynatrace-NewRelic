@@ -24,4 +24,4 @@ SELECT uniqueCount(userId) FROM Transaction WHERE appName = 'MyApp' FACET host S
 SELECT average(cpuPercent), average(memoryUsedBytes) FROM SystemSample FACET hostname SINCE 1 hour ago LIMIT 20
 
 # Multiple facets
-SELECT count(*) FROM Transaction FACET appName, host WHERE duration > 500 SINCE 24 hours ago LIMIT 15
+SELECT count(*) FROM Transaction WHERE duration > 500 FACET appName, host SINCE 24 hours ago LIMIT 15

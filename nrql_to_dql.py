@@ -129,10 +129,11 @@ class NRQLtoDQLConverter:
     
     def _convert_where_conditions(self, where_clause: str) -> str:
         """Convert WHERE conditions from NRQL to DQL syntax."""
-        # Convert LIKE to contains or startsWith
-        where_clause = re.sub(r"(\w+)\s+LIKE\s+'%(.+)%'", r"contains(\1, '\2')", where_clause, flags=re.IGNORECASE)
-        where_clause = re.sub(r"(\w+)\s+LIKE\s+'(.+)%'", r"startsWith(\1, '\2')", where_clause, flags=re.IGNORECASE)
-        where_clause = re.sub(r"(\w+)\s+LIKE\s+'%(.+)'", r"endsWith(\1, '\2')", where_clause, flags=re.IGNORECASE)
+        # Convert LIKE to contains, startsWith, or endsWith
+        # Order matters: check most specific patterns first
+        where_clause = re.sub(r"(\w+)\s+LIKE\s+'%(.+?)%'", r"contains(\1, '\2')", where_clause, flags=re.IGNORECASE)
+        where_clause = re.sub(r"(\w+)\s+LIKE\s+'(.+?)%'", r"startsWith(\1, '\2')", where_clause, flags=re.IGNORECASE)
+        where_clause = re.sub(r"(\w+)\s+LIKE\s+'%(.+?)'", r"endsWith(\1, '\2')", where_clause, flags=re.IGNORECASE)
         
         # Convert = to ==
         where_clause = re.sub(r"(\w+)\s*=\s*'([^']+)'", r"\1 == '\2'", where_clause)

@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 350">
+  <defs>
+    <linearGradient id="exportGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1CE783"/>
+      <stop offset="100%" style="stop-color:#17B86A"/>
+    </linearGradient>
+    <linearGradient id="transformGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4A90D9"/>
+      <stop offset="100%" style="stop-color:#3A7BC8"/>
+    </linearGradient>
+    <linearGradient id="importGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6F2DA8"/>
+      <stop offset="100%" style="stop-color:#5A2490"/>
+    </linearGradient>
+    <filter id="shadowP" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.25"/>
+    </filter>
+    <marker id="arrowP" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="350" fill="#f8f9fa"/>
+
+  <!-- Title -->
+  <text x="450" y="35" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Migration Pipeline Architecture</text>
+
+  <!-- Phase 1: Export -->
+  <g filter="url(#shadowP)">
+    <rect x="30" y="60" width="260" height="270" rx="10" fill="url(#exportGrad)"/>
+    <text x="160" y="90" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Phase 1: Export</text>
+  </g>
+
+  <rect x="50" y="110" width="220" height="45" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="160" y="128" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">New Relic NerdGraph API</text>
+  <text x="160" y="145" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">GraphQL Queries</text>
+
+  <text x="160" y="175" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">↓</text>
+
+  <rect x="50" y="185" width="220" height="45" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="160" y="203" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">NewRelicClient</text>
+  <text x="160" y="220" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Pagination + Rate Limiting</text>
+
+  <text x="160" y="250" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">↓</text>
+
+  <rect x="50" y="260" width="220" height="55" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="160" y="283" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Export JSON</text>
+  <text x="160" y="300" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">newrelic_export.json</text>
+
+  <!-- Arrow 1 -->
+  <path d="M 300 195 L 330 195" stroke="#666" stroke-width="3" fill="none" marker-end="url(#arrowP)"/>
+
+  <!-- Phase 2: Transform -->
+  <g filter="url(#shadowP)">
+    <rect x="340" y="60" width="220" height="270" rx="10" fill="url(#transformGrad)"/>
+    <text x="450" y="90" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Phase 2: Transform</text>
+  </g>
+
+  <rect x="355" y="110" width="190" height="100" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="450" y="128" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Transformers</text>
+  <text x="450" y="148" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="9">DashboardTransformer</text>
+  <text x="450" y="162" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="9">AlertTransformer</text>
+  <text x="450" y="176" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="9">SyntheticTransformer</text>
+  <text x="450" y="190" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="9">SLOTransformer / WorkloadTransformer</text>
+
+  <text x="450" y="225" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">↓</text>
+
+  <rect x="355" y="235" width="190" height="35" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="450" y="258" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Mapping Rules</text>
+
+  <text x="450" y="285" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">↓</text>
+
+  <rect x="355" y="295" width="190" height="25" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="450" y="313" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="10">dynatrace_config.json</text>
+
+  <!-- Arrow 2 -->
+  <path d="M 570 195 L 600 195" stroke="#666" stroke-width="3" fill="none" marker-end="url(#arrowP)"/>
+
+  <!-- Phase 3: Import -->
+  <g filter="url(#shadowP)">
+    <rect x="610" y="60" width="260" height="270" rx="10" fill="url(#importGrad)"/>
+    <text x="740" y="90" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Phase 3: Import</text>
+  </g>
+
+  <rect x="630" y="110" width="220" height="45" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="740" y="128" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">DynatraceClient</text>
+  <text x="740" y="145" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Validation + Retry Logic</text>
+
+  <text x="740" y="175" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">↓</text>
+
+  <rect x="630" y="185" width="220" height="55" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="740" y="203" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Dynatrace APIs</text>
+  <text x="740" y="220" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Settings API v2</text>
+  <text x="740" y="232" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Configuration API v1</text>
+
+  <text x="740" y="260" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="10">↓</text>
+
+  <rect x="630" y="270" width="220" height="45" rx="5" fill="white" fill-opacity="0.95"/>
+  <text x="740" y="288" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Migration Report</text>
+  <text x="740" y="305" text-anchor="middle" fill="#666" font-family="Arial, sans-serif" font-size="10">Success / Warnings / Errors</text>
+</svg>

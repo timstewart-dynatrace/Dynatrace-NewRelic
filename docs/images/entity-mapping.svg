@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <defs>
+    <linearGradient id="nrGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1CE783"/>
+      <stop offset="100%" style="stop-color:#17B86A"/>
+    </linearGradient>
+    <linearGradient id="dtGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6F2DA8"/>
+      <stop offset="100%" style="stop-color:#5A2490"/>
+    </linearGradient>
+    <filter id="shadow2" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.2"/>
+    </filter>
+    <marker id="arrow2" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4A90D9"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#f8f9fa"/>
+
+  <!-- Title -->
+  <text x="400" y="35" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="20" font-weight="bold">Entity Mapping: New Relic → Dynatrace</text>
+
+  <!-- New Relic Column -->
+  <g filter="url(#shadow2)">
+    <rect x="50" y="60" width="250" height="320" rx="8" fill="url(#nrGrad2)"/>
+    <text x="175" y="90" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">New Relic</text>
+  </g>
+
+  <!-- NR Items -->
+  <rect x="70" y="110" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="175" y="133" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Dashboard (multi-page)</text>
+
+  <rect x="70" y="155" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="175" y="178" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Alert Policy + Conditions</text>
+
+  <rect x="70" y="200" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="175" y="223" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Synthetic Monitor</text>
+
+  <rect x="70" y="245" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="175" y="268" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">SLO</text>
+
+  <rect x="70" y="290" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="175" y="313" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Workload</text>
+
+  <rect x="70" y="335" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="175" y="358" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Notification Channel</text>
+
+  <!-- Dynatrace Column -->
+  <g filter="url(#shadow2)">
+    <rect x="500" y="60" width="250" height="320" rx="8" fill="url(#dtGrad2)"/>
+    <text x="625" y="90" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Dynatrace</text>
+  </g>
+
+  <!-- DT Items -->
+  <rect x="520" y="110" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="625" y="133" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Dashboard (per page)</text>
+
+  <rect x="520" y="155" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="625" y="178" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Alerting Profile + Metric Events</text>
+
+  <rect x="520" y="200" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="625" y="223" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">HTTP / Browser Monitor</text>
+
+  <rect x="520" y="245" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="625" y="268" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">SLO</text>
+
+  <rect x="520" y="290" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="625" y="313" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Management Zone</text>
+
+  <rect x="520" y="335" width="210" height="35" rx="5" fill="white" filter="url(#shadow2)"/>
+  <text x="625" y="358" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="13">Problem Notification</text>
+
+  <!-- Arrows with labels -->
+  <line x1="290" y1="127" x2="510" y2="127" stroke="#4A90D9" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="400" y="120" text-anchor="middle" fill="#4A90D9" font-family="Arial, sans-serif" font-size="11" font-weight="bold">1:N</text>
+
+  <line x1="290" y1="172" x2="510" y2="172" stroke="#4A90D9" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="400" y="165" text-anchor="middle" fill="#4A90D9" font-family="Arial, sans-serif" font-size="11" font-weight="bold">1:1 + 1:N</text>
+
+  <line x1="290" y1="217" x2="510" y2="217" stroke="#4A90D9" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="400" y="210" text-anchor="middle" fill="#4A90D9" font-family="Arial, sans-serif" font-size="11" font-weight="bold">1:1</text>
+
+  <line x1="290" y1="262" x2="510" y2="262" stroke="#4A90D9" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="400" y="255" text-anchor="middle" fill="#4A90D9" font-family="Arial, sans-serif" font-size="11" font-weight="bold">1:1</text>
+
+  <line x1="290" y1="307" x2="510" y2="307" stroke="#4A90D9" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="400" y="300" text-anchor="middle" fill="#4A90D9" font-family="Arial, sans-serif" font-size="11" font-weight="bold">1:1</text>
+
+  <line x1="290" y1="352" x2="510" y2="352" stroke="#4A90D9" stroke-width="2" marker-end="url(#arrow2)"/>
+  <text x="400" y="345" text-anchor="middle" fill="#4A90D9" font-family="Arial, sans-serif" font-size="11" font-weight="bold">1:1</text>
+</svg>

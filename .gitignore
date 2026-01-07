@@ -3,6 +3,15 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.so
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -30,6 +39,47 @@ env/
 .venv
 
 # IDEs
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
 .vscode/
 .idea/
 *.swp
@@ -46,3 +96,25 @@ htmlcov/
 *.log
 *.tmp
 /tmp/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Migration output
+output/
+exports/
+transformed/
+reports/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets (never commit)
+*.pem
+*.key
+credentials.json
+secrets.json

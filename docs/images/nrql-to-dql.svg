@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 850 280">
+  <defs>
+    <linearGradient id="nrGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1CE783"/>
+      <stop offset="100%" style="stop-color:#17B86A"/>
+    </linearGradient>
+    <linearGradient id="dtGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6F2DA8"/>
+      <stop offset="100%" style="stop-color:#5A2490"/>
+    </linearGradient>
+    <filter id="shadow3" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.2"/>
+    </filter>
+    <marker id="arrow3" markerWidth="12" markerHeight="8" refX="10" refY="4" orient="auto">
+      <polygon points="0 0, 12 4, 0 8" fill="#4A90D9"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="850" height="280" fill="#f8f9fa"/>
+
+  <!-- Title -->
+  <text x="425" y="30" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="18" font-weight="bold">NRQL to DQL Conversion Example</text>
+
+  <!-- NRQL Box -->
+  <g filter="url(#shadow3)">
+    <rect x="30" y="50" width="320" height="200" rx="10" fill="url(#nrGrad3)"/>
+    <text x="190" y="80" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">NRQL Query</text>
+  </g>
+
+  <!-- NRQL Code Block -->
+  <rect x="45" y="95" width="290" height="140" rx="5" fill="#1a1a2e"/>
+  <text x="55" y="118" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">SELECT</text>
+  <text x="102" y="118" fill="#66D9EF" font-family="Consolas, monospace" font-size="11">average</text>
+  <text x="152" y="118" fill="#FFF" font-family="Consolas, monospace" font-size="11">(duration)</text>
+
+  <text x="55" y="138" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">FROM</text>
+  <text x="95" y="138" fill="#A6E22E" font-family="Consolas, monospace" font-size="11">Transaction</text>
+
+  <text x="55" y="158" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">WHERE</text>
+  <text x="103" y="158" fill="#FFF" font-family="Consolas, monospace" font-size="11">appName =</text>
+  <text x="180" y="158" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">'MyApp'</text>
+
+  <text x="55" y="178" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">FACET</text>
+  <text x="97" y="178" fill="#FFF" font-family="Consolas, monospace" font-size="11">host</text>
+
+  <text x="55" y="198" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">SINCE</text>
+  <text x="98" y="198" fill="#AE81FF" font-family="Consolas, monospace" font-size="11">1 hour ago</text>
+
+  <!-- Arrow -->
+  <g>
+    <line x1="365" y1="150" x2="475" y2="150" stroke="#4A90D9" stroke-width="3" marker-end="url(#arrow3)"/>
+    <rect x="385" y="130" width="75" height="40" rx="5" fill="#4A90D9"/>
+    <text x="422" y="148" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="9" font-weight="bold">nrql_to_dql</text>
+    <text x="422" y="162" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="9" font-weight="bold">.py</text>
+  </g>
+
+  <!-- DQL Box -->
+  <g filter="url(#shadow3)">
+    <rect x="500" y="50" width="320" height="200" rx="10" fill="url(#dtGrad3)"/>
+    <text x="660" y="80" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="14" font-weight="bold">DQL Query</text>
+  </g>
+
+  <!-- DQL Code Block -->
+  <rect x="515" y="95" width="290" height="140" rx="5" fill="#1a1a2e"/>
+  <text x="525" y="118" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">fetch</text>
+  <text x="563" y="118" fill="#A6E22E" font-family="Consolas, monospace" font-size="11">dt.entity.service</text>
+  <text x="525" y="133" fill="#AE81FF" font-family="Consolas, monospace" font-size="11">, from:now()-1h</text>
+
+  <text x="525" y="158" fill="#FFF" font-family="Consolas, monospace" font-size="11">|</text>
+  <text x="535" y="158" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">filter</text>
+  <text x="578" y="158" fill="#FFF" font-family="Consolas, monospace" font-size="11">service.name ==</text>
+  <text x="710" y="158" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">"MyApp"</text>
+
+  <text x="525" y="183" fill="#FFF" font-family="Consolas, monospace" font-size="11">|</text>
+  <text x="535" y="183" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">summarize</text>
+  <text x="610" y="183" fill="#66D9EF" font-family="Consolas, monospace" font-size="11">avg</text>
+  <text x="635" y="183" fill="#FFF" font-family="Consolas, monospace" font-size="11">(response_time)</text>
+
+  <text x="535" y="203" fill="#E6DB74" font-family="Consolas, monospace" font-size="11">by:</text>
+  <text x="558" y="203" fill="#FFF" font-family="Consolas, monospace" font-size="11">{host.name}</text>
+</svg>

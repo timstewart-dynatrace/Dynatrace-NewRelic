@@ -1,168 +1,168 @@
-# New Relic to Dynatrace Universal Migration Tool
+# New Relic to Dynatrace Migration Tool
 
-A comprehensive, generic migration framework for converting New Relic monitoring configurations to Dynatrace.
+A comprehensive migration framework for converting New Relic monitoring configurations to Dynatrace.
 
-## Overview
+## Features
 
-This tool provides a complete solution for migrating all monitoring configurations from New Relic to Dynatrace, including:
-
-- **Dashboards** - Visualization and reporting
-- **Alerts/Alert Policies** - Alerting configurations and conditions
-- **Synthetic Monitors** - Availability and browser-based testing
-- **APM Configurations** - Application performance monitoring settings
-- **Infrastructure Monitoring** - Host and infrastructure configurations
-- **Service Level Objectives (SLOs)** - Performance targets
-- **Workloads** - Entity groupings
-- **Notification Channels** - Alert delivery mechanisms
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                    New Relic to Dynatrace Migration Tool                │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────────┐  │
-│  │   EXPORTER   │    │  TRANSFORMER │    │        IMPORTER          │  │
-│  │              │    │              │    │                          │  │
-│  │ New Relic    │───▶│   Mapping    │───▶│  Dynatrace               │  │
-│  │ NerdGraph    │    │   Engine     │    │  Settings API v2         │  │
-│  │ API          │    │              │    │  Configuration API       │  │
-│  └──────────────┘    └──────────────┘    └──────────────────────────┘  │
-│         │                   │                        │                  │
-│         ▼                   ▼                        ▼                  │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────────────────┐  │
-│  │ Export JSON  │    │ Mapped JSON  │    │  Import Report           │  │
-│  │ (backup)     │    │ (Dynatrace)  │    │  (success/failures)      │  │
-│  └──────────────┘    └──────────────┘    └──────────────────────────┘  │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-## Prerequisites
-
-- Python 3.9+
-- New Relic User API Key (with appropriate permissions)
-- Dynatrace API Token (with appropriate scopes)
+- **Full Migration Pipeline** - Export → Transform → Import
+- **NRQL to DQL Converter** - Standalone query conversion utility
+- **Selective Migration** - Choose specific components to migrate
+- **Dry Run Mode** - Validate without making changes
+- **Rich CLI Output** - Progress indicators and detailed reports
 
 ## Installation
 
 ```bash
-cd newrelic-to-dynatrace-migration
 pip install -r requirements.txt
 ```
 
 ## Configuration
 
-Create a `.env` file or set environment variables:
+Copy `.env.example` to `.env` and configure:
 
 ```bash
-# New Relic Configuration
+# New Relic
 NEW_RELIC_API_KEY=NRAK-XXXXXXXXXXXXXXXXXXXXXXXXXXXX
 NEW_RELIC_ACCOUNT_ID=1234567
+NEW_RELIC_REGION=US  # or EU
 
-# Dynatrace Configuration
+# Dynatrace
 DYNATRACE_API_TOKEN=dt0c01.XXXXXXXXXXXXXXXXXXXXXXXX
 DYNATRACE_ENVIRONMENT_URL=https://abc12345.live.dynatrace.com
 ```
 
 ## Usage
 
-### Full Migration
+### Migration Tool
+
 ```bash
+# Full migration
 python migrate.py --full
-```
 
-### Export Only (from New Relic)
-```bash
-python migrate.py --export-only --output ./exports/
-```
+# Dry run (validate without changes)
+python migrate.py --dry-run --full
 
-### Import Only (to Dynatrace)
-```bash
-python migrate.py --import-only --input ./exports/transformed/
-```
+# Export only
+python migrate.py --export-only --output ./exports
 
-### Selective Migration
-```bash
-# Migrate only dashboards
-python migrate.py --components dashboards
+# Import only
+python migrate.py --import-only --input ./exports
 
-# Migrate multiple components
+# Specific components
 python migrate.py --components dashboards,alerts,synthetics
 
-# Dry run (validate without applying)
-python migrate.py --dry-run --components alerts
-```
-
-### List Available Components
-```bash
+# List available components
 python migrate.py --list-components
 ```
 
-## Entity Mapping Reference
+### NRQL to DQL Converter
 
-| New Relic Concept | Dynatrace Equivalent |
-|-------------------|---------------------|
-| Dashboard | Dashboard |
-| Alert Policy | Alerting Profile |
-| Alert Condition (NRQL) | Metric Event / Custom Alert |
-| Alert Condition (APM) | Auto-Adaptive Baseline Alert |
-| Synthetic Monitor (Ping) | HTTP Monitor |
-| Synthetic Monitor (Scripted Browser) | Browser Monitor |
-| Synthetic Monitor (Scripted API) | HTTP Monitor (Multi-step) |
-| Notification Channel | Alerting Integration |
-| Workload | Management Zone |
-| SLO | SLO (native) |
-| APM Service | Service (auto-detected) |
-| Infrastructure Host | Host (auto-detected) |
+```bash
+# Convert a single query
+python nrql_to_dql.py "SELECT average(duration) FROM Transaction WHERE appName = 'MyApp'"
+
+# Interactive mode
+python nrql_to_dql.py --interactive
+
+# Show reference table
+python nrql_to_dql.py --reference
+
+# Convert from file
+python nrql_to_dql.py --file queries.txt --output converted.dql
+```
+
+## Supported Components
+
+| Component | New Relic | Dynatrace |
+|-----------|-----------|-----------|
+| Dashboards | Dashboard (multi-page) | Dashboard (per page) |
+| Alerts | Alert Policy + Conditions | Alerting Profile + Metric Events |
+| Synthetics | Ping/Browser/API Monitors | HTTP/Browser Monitors |
+| SLOs | Service Level Objectives | SLOs |
+| Workloads | Entity Groupings | Management Zones |
+| Notifications | Channels | Problem Notifications |
+
+## NRQL to DQL Quick Reference
+
+| NRQL | DQL |
+|------|-----|
+| `SELECT * FROM Log` | `fetch logs` |
+| `SELECT count(*) FROM Transaction` | `fetch ... \| summarize count()` |
+| `WHERE field = 'value'` | `\| filter field == "value"` |
+| `WHERE field LIKE '%pattern%'` | `\| filter matchesPhrase(field, "...")` |
+| `FACET fieldName` | `\| summarize by: {fieldName}` |
+| `SINCE 1 hour ago` | `from:now()-1h` |
+| `LIMIT 100` | `\| limit 100` |
+| `average(field)` | `avg(field)` |
+| `uniqueCount(field)` | `countDistinct(field)` |
+| `percentile(field, 95)` | `percentile(field, 95)` |
 
 ## Project Structure
 
 ```
 newrelic-to-dynatrace-migration/
-├── migrate.py                 # Main entry point
-├── requirements.txt           # Python dependencies
+├── migrate.py              # Main migration CLI
+├── nrql_to_dql.py          # NRQL → DQL converter
+├── requirements.txt        # Dependencies
+├── .env.example            # Environment template
+│
 ├── config/
-│   └── settings.py           # Configuration management
-├── exporters/
-│   ├── __init__.py
-│   ├── base_exporter.py      # Base exporter class
-│   ├── dashboard_exporter.py # Dashboard export logic
-│   ├── alert_exporter.py     # Alert export logic
-│   ├── synthetic_exporter.py # Synthetic monitor export
-│   ├── apm_exporter.py       # APM configuration export
-│   ├── slo_exporter.py       # SLO export logic
-│   └── workload_exporter.py  # Workload export logic
+│   └── settings.py         # Configuration management
+│
+├── clients/
+│   ├── newrelic_client.py  # New Relic NerdGraph client
+│   └── dynatrace_client.py # Dynatrace API client
+│
 ├── transformers/
-│   ├── __init__.py
-│   ├── base_transformer.py   # Base transformer class
+│   ├── mapping_rules.py    # Entity mappings
 │   ├── dashboard_transformer.py
 │   ├── alert_transformer.py
 │   ├── synthetic_transformer.py
-│   └── mapping_rules.py      # Mapping configuration
-├── importers/
-│   ├── __init__.py
-│   ├── base_importer.py      # Base importer class
-│   ├── dashboard_importer.py
-│   ├── alert_importer.py
-│   ├── synthetic_importer.py
-│   └── settings_importer.py  # Settings 2.0 API importer
-├── clients/
-│   ├── __init__.py
-│   ├── newrelic_client.py    # New Relic NerdGraph client
-│   └── dynatrace_client.py   # Dynatrace API client
-├── models/
-│   ├── __init__.py
-│   ├── newrelic_models.py    # New Relic data models
-│   └── dynatrace_models.py   # Dynatrace data models
-├── utils/
-│   ├── __init__.py
-│   ├── logger.py             # Logging utilities
-│   └── validators.py         # Validation helpers
-└── tests/
-    └── ...                   # Test files
+│   ├── slo_transformer.py
+│   └── workload_transformer.py
+│
+└── utils/
+    ├── logger.py           # Structured logging
+    └── validators.py       # Configuration validators
 ```
+
+## Output
+
+After running migration:
+
+```
+output/
+├── exports/
+│   └── newrelic_export.json       # Raw New Relic data
+├── transformed/
+│   └── dynatrace_config.json      # Transformed configs
+└── reports/
+    └── migration_report_*.json    # Detailed results
+```
+
+## API Permissions Required
+
+### New Relic
+- NerdGraph access
+- Dashboards (read)
+- Alerts (read)
+- Synthetics (read)
+- Service Levels (read)
+- Workloads (read)
+
+### Dynatrace
+- `settings.read` / `settings.write`
+- `WriteConfig` / `ReadConfig`
+- `ExternalSyntheticIntegration`
+- `slo.read` / `slo.write`
+
+## Known Limitations
+
+1. **NRQL to DQL** - Complex queries may require manual review
+2. **Scripted Synthetics** - Complex scripts need manual recreation
+3. **Entity References** - GUIDs don't map to Dynatrace entity IDs
+4. **Dashboard Variables** - Limited filter conversion
+5. **Dynamic Baselines** - Require manual configuration
 
 ## License
 

@@ -52,24 +52,24 @@
     <rect x="320" y="40" width="260" height="220" rx="10" fill="url(#toolGrad)"/>
     <text x="450" y="75" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="18" font-weight="bold">Migration Tool</text>
 
-    <!-- Pipeline -->
-    <rect x="340" y="100" width="70" height="50" rx="5" fill="white" fill-opacity="0.9"/>
-    <text x="375" y="130" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Export</text>
+    <!-- Pipeline - adjusted to fit within container (x=320 to x=580) -->
+    <rect x="335" y="100" width="65" height="50" rx="5" fill="white" fill-opacity="0.9"/>
+    <text x="367" y="130" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Export</text>
 
-    <path d="M 415 125 L 435 125" stroke="white" stroke-width="2" fill="none" marker-end="url(#arrowWhite)"/>
+    <path d="M 405 125 L 420 125" stroke="white" stroke-width="2" fill="none" marker-end="url(#arrowWhite)"/>
     <defs>
       <marker id="arrowWhite" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
         <polygon points="0 0, 8 3, 0 6" fill="white"/>
       </marker>
     </defs>
 
-    <rect x="445" y="100" width="70" height="50" rx="5" fill="white" fill-opacity="0.9"/>
-    <text x="480" y="130" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Transform</text>
+    <rect x="425" y="100" width="70" height="50" rx="5" fill="white" fill-opacity="0.9"/>
+    <text x="460" y="130" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="10" font-weight="bold">Transform</text>
 
-    <path d="M 520 125 L 540 125" stroke="white" stroke-width="2" fill="none" marker-end="url(#arrowWhite)"/>
+    <path d="M 500 125 L 515 125" stroke="white" stroke-width="2" fill="none" marker-end="url(#arrowWhite)"/>
 
-    <rect x="550" y="100" width="70" height="50" rx="5" fill="white" fill-opacity="0.9"/>
-    <text x="585" y="130" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Import</text>
+    <rect x="520" y="100" width="55" height="50" rx="5" fill="white" fill-opacity="0.9"/>
+    <text x="547" y="130" text-anchor="middle" fill="#333" font-family="Arial, sans-serif" font-size="11" font-weight="bold">Import</text>
 
     <!-- Features -->
     <text x="450" y="180" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="11">+ NRQL to DQL Converter</text>

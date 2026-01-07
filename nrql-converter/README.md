@@ -1,27 +1,36 @@
 # NRQL to DQL Converter
 
-A Python tool to convert NewRelic NRQL (New Relic Query Language) queries to Dynatrace DQL (Dynatrace Query Language) queries.
+A comprehensive Python tool for converting New Relic Query Language (NRQL) queries to Dynatrace Query Language (DQL).
 
 ## Overview
 
-This tool helps users migrate from NewRelic to Dynatrace by automatically converting NRQL queries to their DQL equivalents. It handles common query patterns including aggregations, filtering, grouping, and time ranges.
+This tool helps users migrate from New Relic to Dynatrace by automatically converting NRQL queries to their DQL equivalents. It handles common query patterns including aggregations, filtering, grouping, time ranges, and provides confidence scoring for each conversion.
 
 ## Features
 
-- **SELECT clause conversion**: Converts field selections and aggregation functions
-- **FROM clause mapping**: Maps NewRelic event types to Dynatrace record types
-- **WHERE clause translation**: Converts filter conditions with proper DQL syntax
-- **Time range conversion**: Transforms SINCE/UNTIL clauses to DQL timeframe filters
-- **Aggregation functions**: Supports COUNT, AVG, SUM, MIN, MAX, uniqueCount, and more
-- **FACET to GROUP BY**: Converts FACET clauses to DQL summarize with by clause
-- **LIMIT support**: Preserves query result limits
-- **Operator conversion**: Handles LIKE, AND, OR, comparison operators
+- **Interactive Mode**: Real-time query conversion with rich CLI interface
+- **Batch Processing**: Convert multiple queries from a file
+- **Reference Tables**: Built-in quick reference for common conversions
+- **Confidence Scoring**: High/Medium/Low confidence ratings for conversions
+- **Field Mapping**: Automatic mapping of New Relic fields to Dynatrace equivalents
+- **Warning System**: Alerts for queries that may need manual review
+- **Rich Output**: Syntax-highlighted DQL output with conversion details
+
+### Supported Conversions
+
+- SELECT clause with aggregations (count, avg, sum, min, max, percentile, etc.)
+- FROM clause with event type mapping
+- WHERE clause with operators (=, !=, <, >, LIKE, IN, IS NULL)
+- FACET (group by) clauses
+- Time range expressions (SINCE, UNTIL)
+- LIMIT clauses
+- TIMESERIES queries
 
 ## Installation
 
-No external dependencies required - uses only Python 3 standard library.
-
 ```bash
+cd nrql-converter
+pip install -r requirements.txt
 chmod +x nrql_to_dql.py
 ```
 
@@ -29,22 +38,35 @@ chmod +x nrql_to_dql.py
 
 ### Command Line
 
-Convert a query directly from command line:
+Convert a single query:
 
 ```bash
 ./nrql_to_dql.py "SELECT count(*) FROM Transaction WHERE appName = 'MyApp' SINCE 1 hour ago"
 ```
 
-With verbose output:
+### Interactive Mode
 
 ```bash
-./nrql_to_dql.py "SELECT count(*) FROM Transaction SINCE 1 hour ago" -v
+./nrql_to_dql.py --interactive
 ```
 
-From a file:
+In interactive mode:
+- Type NRQL queries to convert them
+- Type `ref` or `reference` to see the quick reference table
+- Type `quit` or `exit` to exit
+
+### Show Reference Table
 
 ```bash
-./nrql_to_dql.py -f input.nrql -o output.dql
+./nrql_to_dql.py --reference
+```
+
+### Batch Processing
+
+Convert queries from a file:
+
+```bash
+./nrql_to_dql.py --file queries.nrql --output converted.dql
 ```
 
 ### As a Python Module
@@ -53,13 +75,67 @@ From a file:
 from nrql_to_dql import NRQLtoDQLConverter
 
 converter = NRQLtoDQLConverter()
-dql = converter.convert("SELECT count(*) FROM Transaction SINCE 1 hour ago")
-print(dql)
+result = converter.convert("SELECT count(*) FROM Transaction SINCE 1 hour ago")
+
+print(f"DQL: {result.converted_dql}")
+print(f"Confidence: {result.confidence}")
+print(f"Warnings: {result.warnings}")
 ```
+
+## Quick Reference
+
+| NRQL | DQL |
+|------|-----|
+| `SELECT * FROM Log` | `fetch logs` |
+| `SELECT count(*) FROM Transaction` | `fetch ... \| summarize count()` |
+| `WHERE field = 'value'` | `\| filter field == "value"` |
+| `WHERE field LIKE '%pattern%'` | `\| filter matchesPhrase(field, "pattern")` |
+| `WHERE field IN ('a', 'b')` | `\| filter in(field, "a", "b")` |
+| `WHERE field IS NULL` | `\| filter isNull(field)` |
+| `FACET fieldName` | `\| summarize by: {fieldName}` |
+| `SINCE 1 hour ago` | `from:now()-1h` |
+| `LIMIT 100` | `\| limit 100` |
+
+### Aggregation Functions
+
+| NRQL | DQL |
+|------|-----|
+| `count(*)` | `count()` |
+| `average(field)` | `avg(field)` |
+| `sum(field)` | `sum(field)` |
+| `max(field)` | `max(field)` |
+| `min(field)` | `min(field)` |
+| `uniqueCount(field)` | `countDistinct(field)` |
+| `percentile(field, 95)` | `percentile(field, 95)` |
+| `latest(field)` | `last(field)` |
+| `earliest(field)` | `first(field)` |
+
+### Field Mappings
+
+| New Relic Field | Dynatrace Field |
+|-----------------|-----------------|
+| `duration` | `response_time` |
+| `appName` | `service.name` |
+| `host` | `host.name` |
+| `httpResponseCode` | `http.status_code` |
+| `cpuPercent` | `cpu.usage` |
+| `message` | `content` |
+| `level` | `loglevel` |
+
+### Event Type Mappings
+
+| New Relic Event | Dynatrace Data Type |
+|-----------------|---------------------|
+| `Transaction` | `timeseries` (service metrics) |
+| `Log` | `logs` |
+| `Span` | `spans` |
+| `SystemSample` | `timeseries` (host metrics) |
+| `PageView` | `bizevents` |
+| `SyntheticCheck` | `timeseries` (synthetic metrics) |
 
 ## Examples
 
-### Simple Count Query
+### Simple Aggregation
 
 **NRQL:**
 ```sql
@@ -68,10 +144,11 @@ SELECT count(*) FROM Transaction SINCE 1 hour ago
 
 **DQL:**
 ```sql
-fetch dt.entity.process_group_instance | filterTime -1h | summarize count()
+fetch dt.entity.service, from:now()-1h
+| summarize count()
 ```
 
-### Aggregation with Filtering
+### Filtering with Aggregation
 
 **NRQL:**
 ```sql
@@ -80,116 +157,63 @@ SELECT average(duration) FROM Transaction WHERE appName = 'MyApp' SINCE 24 hours
 
 **DQL:**
 ```sql
-fetch dt.entity.process_group_instance | filter appName == 'MyApp' | filterTime -24h | summarize avg(duration)
+fetch dt.entity.service, from:now()-24h
+| filter service.name == 'MyApp'
+| summarize avg(response_time)
 ```
 
-### Group By (FACET) Query
+### Grouping with FACET
 
 **NRQL:**
 ```sql
-SELECT count(*), average(duration) FROM Transaction FACET name SINCE 1 hour ago LIMIT 10
+SELECT count(*), average(duration) FROM Transaction FACET host SINCE 1 hour ago LIMIT 10
 ```
 
 **DQL:**
 ```sql
-fetch dt.entity.process_group_instance | filterTime -1h | summarize count(), avg(duration) by name | limit 10
+fetch dt.entity.service, from:now()-1h
+| summarize count(), avg(response_time), by: {host.name}
+| limit 10
 ```
 
-### Complex Query with Multiple Conditions
+### Log Query
 
 **NRQL:**
 ```sql
-SELECT count(*) FROM Transaction WHERE appName = 'MyApp' AND duration > 1000 FACET host SINCE 24 hours ago LIMIT 20
+SELECT * FROM Log WHERE level = 'ERROR' SINCE 30 minutes ago
 ```
 
 **DQL:**
 ```sql
-fetch dt.entity.process_group_instance | filter appName == 'MyApp' and duration > 1000 | filterTime -24h | summarize count() by host | limit 20
+fetch logs, from:now()-30m
+| filter loglevel == 'ERROR'
 ```
 
-### LIKE Operator Conversion
+## Output Format
 
-**NRQL:**
-```sql
-SELECT count(*) FROM Transaction WHERE name LIKE '%login%' SINCE 1 hour ago
-```
+The converter provides detailed output including:
 
-**DQL:**
-```sql
-fetch dt.entity.process_group_instance | filter contains(name, 'login') | filterTime -1h | summarize count()
-```
+1. **Converted DQL**: The transformed query
+2. **Confidence Level**: High, Medium, or Low
+3. **Field Mappings Applied**: Which fields were automatically mapped
+4. **Warnings**: Issues that may affect query accuracy
+5. **Manual Review Items**: Parts requiring human verification
 
-## Supported Conversions
+## Limitations
 
-### Functions
-
-| NRQL Function | DQL Function |
-|---------------|--------------|
-| count() | count() |
-| sum() | sum() |
-| average() / avg() | avg() |
-| min() | min() |
-| max() | max() |
-| uniqueCount() | countDistinct() |
-| percentage() | percentage() |
-| rate() | rate() |
-| stddev() | stddev() |
-| median() | median() |
-| percentile() | percentile() |
-
-### Event Types
-
-| NRQL Event Type | DQL Record Type |
-|-----------------|-----------------|
-| Transaction | dt.entity.process_group_instance |
-| TransactionError | dt.entity.process_group_instance |
-| Metric | dt.metrics |
-| Log | dt.entity.log |
-| SystemSample | dt.entity.host |
-| ProcessSample | dt.entity.process |
-
-### Operators
-
-| NRQL Operator | DQL Operator |
-|---------------|--------------|
-| = | == |
-| LIKE '%text%' | contains(field, 'text') |
-| LIKE 'text%' | startsWith(field, 'text') |
-| LIKE '%text' | endsWith(field, 'text') |
-| AND | and |
-| OR | or |
-| NOT | not |
-
-### Time Ranges
-
-| NRQL Time | DQL Time |
-|-----------|----------|
-| SINCE 30 minutes ago | -30m |
-| SINCE 1 hour ago | -1h |
-| SINCE 24 hours ago | -24h |
-| SINCE 7 days ago | -7d |
-| SINCE 1 week ago | -1w |
+- Complex nested queries may require manual adjustment
+- Custom New Relic event types are mapped to `bizevents` by default
+- Some New Relic-specific functions (funnel, histogram) don't have direct DQL equivalents
+- COMPARE WITH clauses require manual implementation
+- Advanced time expressions may need manual review
 
 ## Testing
 
 Run the test suite:
 
 ```bash
-python3 test_nrql_to_dql.py
+python test_nrql_to_dql.py -v
 ```
-
-Run with verbose output:
-
-```bash
-python3 test_nrql_to_dql.py -v
-```
-
-## Limitations
-
-- Complex nested queries may require manual adjustment
-- Custom NewRelic event types will be mapped using a generic pattern
-- Some NewRelic-specific functions may not have direct DQL equivalents
-- Advanced time expressions may need manual review
 
 ## Contributing
 
@@ -197,4 +221,4 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 
 ## License
 
-This project is open source and available under the MIT License.
+MIT License - See LICENSE file for details.

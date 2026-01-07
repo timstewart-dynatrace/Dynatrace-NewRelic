@@ -1,2 +1,2 @@
-# No external dependencies required
-# This tool uses only Python 3 standard library
+click>=8.0.0
+rich>=10.0.0

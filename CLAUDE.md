@@ -266,9 +266,23 @@ Types:
 
 ## Support Resources
 
+- [CLAUDE-for-NR.md](./CLAUDE-for-NR.md) - Research document with GitHub tools and community solutions
 - [New Relic NerdGraph API](https://docs.newrelic.com/docs/apis/nerdgraph/)
 - [Dynatrace Settings API v2](https://docs.dynatrace.com/docs/dynatrace-api/environment-api/settings)
 - [Dynatrace Configuration API](https://docs.dynatrace.com/docs/dynatrace-api/configuration-api)
+- [Dynatrace Monaco CLI](https://docs.dynatrace.com/docs/deliver/configuration-as-code/monaco)
+- [Dynatrace Terraform Provider](https://github.com/dynatrace-oss/terraform-provider-dynatrace)
+- [New Relic Account Migration Tool](https://github.com/newrelic-experimental/nr-account-migration)
+
+## Related Documentation
+
+See [CLAUDE-for-NR.md](./CLAUDE-for-NR.md) for:
+- Available GitHub repositories and tools for both platforms
+- OpenTelemetry migration path as intermediate layer
+- NRQL to DQL conversion reference table
+- Community discussions and resources
+- Recommended step-by-step migration workflow
+- Known limitations and feature gaps
 
 ---
 

@@ -1,0 +1,27 @@
+# Example NRQL Queries
+
+# Simple count query
+SELECT count(*) FROM Transaction SINCE 1 hour ago
+
+# Average duration by application
+SELECT average(duration) FROM Transaction WHERE appName = 'MyApp' SINCE 24 hours ago
+
+# Multiple aggregations with grouping
+SELECT count(*), average(duration), max(duration) FROM Transaction FACET name SINCE 1 hour ago LIMIT 10
+
+# Complex filtering
+SELECT count(*) FROM Transaction WHERE appName = 'MyApp' AND duration > 1000 OR status = 'error' SINCE 24 hours ago
+
+# LIKE operator examples
+SELECT count(*) FROM Transaction WHERE name LIKE '%login%' SINCE 1 hour ago
+SELECT count(*) FROM Transaction WHERE name LIKE 'api%' SINCE 30 minutes ago
+SELECT count(*) FROM Transaction WHERE name LIKE '%error' SINCE 7 days ago
+
+# Unique count
+SELECT uniqueCount(userId) FROM Transaction WHERE appName = 'MyApp' FACET host SINCE 24 hours ago
+
+# System monitoring
+SELECT average(cpuPercent), average(memoryUsedBytes) FROM SystemSample FACET hostname SINCE 1 hour ago LIMIT 20
+
+# Multiple facets
+SELECT count(*) FROM Transaction FACET appName, host WHERE duration > 500 SINCE 24 hours ago LIMIT 15
